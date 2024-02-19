@@ -1,0 +1,26 @@
+{
+  "version": "3",
+  "remote": {
+    "https://deno.land/std@0.209.0/webgpu/create_capture.ts": "72ced703addbf5388bf5e52458676f9b437034efc61e248967f7cb2f1f3e5f32",
+    "https://deno.land/std@0.209.0/webgpu/row_padding.ts": "4e36857b49e6ef1137033d9ceb03a7228fb2e137268d6f904e77fd6efe3ee3a0",
+    "https://deno.land/std@0.97.0/encoding/base64.ts": "eecae390f1f1d1cae6f6c6d732ede5276bf4b9cd29b1d281678c054dc5cc009e",
+    "https://deno.land/x/gmath@0.1.11/mod.ts": "696f0a39bef39268a717f110b391a2280f1a25072546d88ada03bd0aba03279b",
+    "https://deno.land/x/gmath@0.1.11/src/angle.ts": "116e5d0495900ff17352f8bab6765332d76ac672a93ec69afbb5f80576aa2169",
+    "https://deno.land/x/gmath@0.1.11/src/decomposed.ts": "0ebd6ee5276fb74ec8f0decdd9c7b08c98609d7dc382c38696ebde3c27176ba2",
+    "https://deno.land/x/gmath@0.1.11/src/matrix2.ts": "4b89304811d5c8cf55586a9ac103812666e4a3ccede21d12c62ca5c2a1fb3a56",
+    "https://deno.land/x/gmath@0.1.11/src/matrix3.ts": "a198ccc90d010cde481daa24350241e63fc7eb3eab9c5d2efc88903d895b1492",
+    "https://deno.land/x/gmath@0.1.11/src/matrix4.ts": "4a588ffcec8a2d0a922163e5425e69916533c811042dbb7f1603f136076d379e",
+    "https://deno.land/x/gmath@0.1.11/src/projection.ts": "5f9bd9fe110276db5ad30ee4380df5d15a147ed4b75fab03728821f42ebc1a4d",
+    "https://deno.land/x/gmath@0.1.11/src/quaternion.ts": "575d4e0ee783dfd0440593285b64a87238d022f0b758612624d65a8d2f8f915a",
+    "https://deno.land/x/gmath@0.1.11/src/util.ts": "1b19327d98124babb35a3a19084919384f107d7dc8ea1c995538a34817f57c19",
+    "https://deno.land/x/gmath@0.1.11/src/vector2.ts": "f9da5bd2c17aa9b4199991ab8bc64d1d7b7a2cc0425a354350c2e7c18ddfc204",
+    "https://deno.land/x/gmath@0.1.11/src/vector3.ts": "30b920c9e98bd9fe06ee61f66016a8f7fa3235a95f3151c85c602a6b88cc0a00",
+    "https://deno.land/x/gmath@0.1.11/src/vector4.ts": "c7240ab5e5d087dd1091ce904f721df80457894e81ce0b5a23272c5045df61ee",
+    "https://deno.land/x/gmath@0.1.11/wasm/mod.ts": "724fed398ddc3c261e72946a73cf8cc2eee08ae599327e85e8a90d9752481ad7",
+    "https://deno.land/x/gmath@0.1.11/wasm/wasm.js": "77db62126e548d63271853ec35371630dbe84707456f293f5ab8bd2bae6bb831",
+    "https://deno.land/x/lz4@v0.1.2/mod.ts": "4decfc1a3569d03fd1813bd39128b71c8f082850fe98ecfdde20025772916582",
+    "https://deno.land/x/lz4@v0.1.2/wasm.js": "b9c65605327ba273f0c76a6dc596ec534d4cda0f0225d7a94ebc606782319e46",
+    "https://deno.land/x/pngs@0.1.1/mod.ts": "9dc8a7daed1497b94a77b68c954164a9f0b2a6f40866481bdfdbbaf015b5f764",
+    "https://deno.land/x/pngs@0.1.1/wasm.js": "e3d4a8f293b267c9859a2164ca7b4603869bc92fe0d5ad4f109925858bce0c4c"
+  }
+}
