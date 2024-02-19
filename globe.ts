@@ -9,69 +9,61 @@ function vertex(pos: [number, number, number], tc: [number, number]): number[] {
   return [...pos, 1, ...tc];
 }
 
+const PI_2 = Math.PI * 2;
+
 function createVertices(): {
   vertexData: Float32Array;
   indexData: Uint16Array;
 } {
-  const numSegments = 20;
-  const vertexData = [];
-  const indexData = [];
+  const numSegments = 64;
+  const vertices = [];
+  const indices = [];
 
   for (let i = 0; i <= numSegments; i++) {
-    const lat0 = Math.PI * (i - 1) / numSegments;
-    const z0 = Math.sin(lat0);
-    const zr0 = Math.cos(lat0);
-
-    const lat1 = Math.PI * i / numSegments;
-    const z1 = Math.sin(lat1);
-    const zr1 = Math.cos(lat1);
+    const lat = Math.PI * i / numSegments;
 
     for (let j = 0; j <= numSegments; j++) {
-      const lng = 2 * Math.PI * j / numSegments;
-      const x = Math.cos(lng);
-      const y = Math.sin(lng);
+      const lng = Math.PI * 2 * j / numSegments;
+      const x = Math.sin(lat) * Math.cos(lng);
+      const y = Math.sin(lat) * Math.sin(lng);
+      const z = Math.cos(lat);
 
-      vertexData.push(
-        ...vertex([x * zr0, y * zr0, z0], [j / numSegments, i / numSegments]),
-      );
-      vertexData.push(
-        ...vertex([x * zr1, y * zr1, z1], [
-          j / numSegments,
-          (i + 1) / numSegments,
-        ]),
+      vertices.push(
+        vertex([x, y, z], [lat / PI_2, lng / PI_2]),
       );
 
-      const baseIndex = i * (numSegments + 1) + j;
-      if (i < numSegments) {
-        indexData.push(baseIndex, baseIndex + numSegments + 1, baseIndex + 1);
-        indexData.push(
-          baseIndex + 1,
-          baseIndex + numSegments + 1,
-          baseIndex + numSegments + 2,
-        );
+      if (i < numSegments && j < numSegments) {
+        const i0 = vertices.length - 1;
+        const i1 = i0 + 1;
+        const i2 = i0 + (numSegments + 1);
+        const i3 = i2 + 1;
+        indices.push(i2, i1, i0);
+        indices.push(i1, i2, i3);
       }
     }
   }
 
   return {
-    vertexData: new Float32Array(vertexData),
-    indexData: new Uint16Array(indexData),
+    vertexData: new Float32Array(vertices.flat()),
+    indexData: new Uint16Array(indices),
   };
 }
 
-function generateMatrix(aspectRatio = 1): Float32Array {
+function generateMatrix(aspectRatio = 1, rz: gmath.Angle): Float32Array {
   const mxProjection = new gmath.PerspectiveFov(
     new gmath.Deg(45),
     aspectRatio,
     1,
     1000,
   ).toPerspective().toMatrix4();
+  const rot = gmath.Matrix4.fromAngleZ(rz);
   const mxView = gmath.Matrix4.lookAtRh(
-    new gmath.Vector3(1.5, -5, 3),
+    new gmath.Vector3(3, 0, 1),
     new gmath.Vector3(0, 0, 0),
     gmath.Vector3.forward(),
   );
-  return OPENGL_TO_WGPU_MATRIX.mul(mxProjection.mul(mxView)).toFloat32Array();
+  return OPENGL_TO_WGPU_MATRIX.mul(mxProjection.mul(mxView.mul(rot)))
+    .toFloat32Array();
 }
 
 export class Globe extends Renderable {
@@ -80,6 +72,7 @@ export class Globe extends Renderable {
   indexBuffer!: GPUBuffer;
   vertexBuffer!: GPUBuffer;
   indexCount!: number;
+  bindGroupLayout!: GPUBindGroupLayout;
 
   init() {
     const { vertexData, indexData } = createVertices();
@@ -97,7 +90,7 @@ export class Globe extends Renderable {
       contents: indexData.buffer,
     });
 
-    const bindGroupLayout = this.device.createBindGroupLayout({
+    this.bindGroupLayout = this.device.createBindGroupLayout({
       entries: [
         {
           binding: 0,
@@ -110,26 +103,7 @@ export class Globe extends Renderable {
     });
 
     const pipelineLayout = this.device.createPipelineLayout({
-      bindGroupLayouts: [bindGroupLayout],
-    });
-
-    const mxTotal = generateMatrix();
-    const uniformBuffer = createBufferInit(this.device, {
-      label: "Uniform Buffer",
-      usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
-      contents: mxTotal.buffer,
-    });
-
-    this.bindGroup = this.device.createBindGroup({
-      layout: bindGroupLayout,
-      entries: [
-        {
-          binding: 0,
-          resource: {
-            buffer: uniformBuffer,
-          },
-        },
-      ],
+      bindGroupLayouts: [this.bindGroupLayout],
     });
 
     const shader = this.device.createShaderModule({
@@ -172,6 +146,29 @@ export class Globe extends Renderable {
       primitive: {
         cullMode: "back",
       },
+    });
+
+    this.update(new gmath.Deg(0));
+  }
+
+  update(rz: gmath.Angle) {
+    const mxTotal = generateMatrix(1, rz);
+    const uniformBuffer = createBufferInit(this.device, {
+      label: "Uniform Buffer",
+      usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+      contents: mxTotal.buffer,
+    });
+
+    this.bindGroup = this.device.createBindGroup({
+      layout: this.bindGroupLayout,
+      entries: [
+        {
+          binding: 0,
+          resource: {
+            buffer: uniformBuffer,
+          },
+        },
+      ],
     });
   }
 

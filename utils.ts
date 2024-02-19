@@ -109,7 +109,6 @@ export async function requestDevice() {
     const adapter = await navigator.gpu.requestAdapter();
     if (adapter) {
       const device = await adapter.requestDevice();
-      device.pushErrorScope("validation");
       return device;
     }
   }
@@ -117,6 +116,7 @@ export async function requestDevice() {
 }
 
 export async function renderToPNG(object: Renderable, filename: string, dimensions: Dimensions) {
+  object.device.pushErrorScope("validation");
   const { texture, outputBuffer } = createCapture(
     object.device,
     dimensions.width,
