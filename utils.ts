@@ -100,7 +100,7 @@ export const OPENGL_TO_WGPU_MATRIX = gmath.Matrix4.from(
 
 export abstract class Renderable {
   constructor(public device: GPUDevice) {}
-  abstract init(): void;
+  abstract init(): Promise<void>;
   abstract render(encoder: GPUCommandEncoder, view: GPUTextureView): void;
 }
 

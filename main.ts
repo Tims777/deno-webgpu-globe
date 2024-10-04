@@ -7,7 +7,7 @@ const device = await requestDevice();
 const globe = new Globe(device);
 const dimensions = { width: 1000, height: 1000 };
 
-globe.init();
+await globe.init();
 
 for (let rz = 0; rz <= 360; rz += 10) {
     console.log(rz);

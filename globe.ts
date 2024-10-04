@@ -1,4 +1,7 @@
 import * as gmath from "gmath";
+import * as png from "png";
+
+import { createTextureWithData } from "std/webgpu/texture_with_data.ts";
 import {
   createBufferInit,
   OPENGL_TO_WGPU_MATRIX,
@@ -73,8 +76,9 @@ export class Globe extends Renderable {
   vertexBuffer!: GPUBuffer;
   indexCount!: number;
   bindGroupLayout!: GPUBindGroupLayout;
+  texture!: GPUTexture;
 
-  init() {
+  async init() {
     const { vertexData, indexData } = createVertices();
     this.indexCount = indexData.length;
 
@@ -90,6 +94,15 @@ export class Globe extends Renderable {
       contents: indexData.buffer,
     });
 
+    const image2 = png.decode(
+      await Deno.readFile(new URL("./globe.png", import.meta.url)),
+    );
+    this.texture = createTextureWithData(this.device, {
+      size: { width: image2.width, height: image2.height },
+      format: "rgba8unorm-srgb",
+      usage: GPUTextureUsage.TEXTURE_BINDING,
+    }, image2.image);
+
     this.bindGroupLayout = this.device.createBindGroupLayout({
       entries: [
         {
@@ -98,6 +111,18 @@ export class Globe extends Renderable {
           buffer: {
             minBindingSize: 64,
           },
+        },
+        {
+          binding: 1,
+          visibility: GPUShaderStage.FRAGMENT,
+          texture: {
+            viewDimension: "2d",
+          },
+        },
+        {
+          binding: 2,
+          visibility: GPUShaderStage.FRAGMENT,
+          sampler: {},
         },
       ],
     });
@@ -159,6 +184,12 @@ export class Globe extends Renderable {
       contents: mxTotal.buffer,
     });
 
+    const sampler = this.device.createSampler({
+      magFilter: "linear",
+      minFilter: "linear",
+      mipmapFilter: "linear",
+    });
+
     this.bindGroup = this.device.createBindGroup({
       layout: this.bindGroupLayout,
       entries: [
@@ -167,6 +198,14 @@ export class Globe extends Renderable {
           resource: {
             buffer: uniformBuffer,
           },
+        },
+        {
+          binding: 1,
+          resource: this.texture.createView({ dimension: "2d" }),
+        },
+        {
+          binding: 2,
+          resource: sampler,
         },
       ],
     });

@@ -2,7 +2,9 @@
   "version": "3",
   "remote": {
     "https://deno.land/std@0.209.0/webgpu/create_capture.ts": "72ced703addbf5388bf5e52458676f9b437034efc61e248967f7cb2f1f3e5f32",
+    "https://deno.land/std@0.209.0/webgpu/describe_texture_format.ts": "6316b7a75274a4d54b3cedfc3e94047f4c445de5233671cec72b3ba5e95d43fd",
     "https://deno.land/std@0.209.0/webgpu/row_padding.ts": "4e36857b49e6ef1137033d9ceb03a7228fb2e137268d6f904e77fd6efe3ee3a0",
+    "https://deno.land/std@0.209.0/webgpu/texture_with_data.ts": "3e082fecf3bf8c41c426e91cc0bfd5578b04d2863b0e7e86cd3710ed6b4d0b11",
     "https://deno.land/std@0.97.0/encoding/base64.ts": "eecae390f1f1d1cae6f6c6d732ede5276bf4b9cd29b1d281678c054dc5cc009e",
     "https://deno.land/x/gmath@0.1.11/mod.ts": "696f0a39bef39268a717f110b391a2280f1a25072546d88ada03bd0aba03279b",
     "https://deno.land/x/gmath@0.1.11/src/angle.ts": "116e5d0495900ff17352f8bab6765332d76ac672a93ec69afbb5f80576aa2169",
