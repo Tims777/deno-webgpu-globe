@@ -4,6 +4,9 @@ This projects is a simple demonstration, of how a globe can be implemented using
 WebGPU. While the current implementation is based on Deno's experimental WebGPU
 feature, most of the code should easily be portable to supporting browsers.
 
+![Sample Output Image](https://github.com/user-attachments/assets/4bd1bb93-9cd0-4d7f-ad5e-e56c781e750e)
+
+
 ## About Deno WebGPU
 
 This project is based on the
